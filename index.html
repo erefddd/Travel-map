@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>旅運通 重新設計 POC｜行程優先 × 情境自適應</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pg:#e9e4e1;--ink:#1b1215;--panel:#2a1c20;--p2:#35242a;--line:#4a343b;--tx:#f6ecea;--mut:#b9a3a6;--gold:#e0a96d;--ok:#0fa863;--warn:#f5a524;--org:#f08a24;--bad:#f01e1e;--vio:#7a4de8;--fs:1;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+@media(prefers-color-scheme:dark){:root{--pg:#0d0809}}
+html[data-hc="1"]{--ink:#000;--panel:#000;--p2:#111;--line:#fff;--tx:#fff;--mut:#e6e6e6}
+*{box-sizing:border-box;margin:0}
+body{background:var(--pg);font:calc(14px*var(--fs))/1.5 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--tx);display:flex;justify-content:center}
+.app{width:100%;max-width:420px;height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 40% at 50% 6%,#d98a5a44,transparent 70%),linear-gradient(180deg,#8a4a3a,#4a2828 30%,#221315)}
+html[data-hc="1"] .app,html.lite .app{background:var(--ink)}
+@media(min-width:460px){.app{margin:16px 0;height:min(880px,calc(100vh - 32px));border-radius:28px;overflow:hidden;box-shadow:0 20px 60px #0006}}
+header{padding:12px 16px 6px;flex:none}
+.brand{display:flex;justify-content:space-between;align-items:baseline}.brand b{font-size:1.7em;font-weight:900;letter-spacing:.06em;text-shadow:0 0 12px #ff9a5a88}.brand small{color:var(--mut)}
+.scn{display:flex;gap:5px;margin-top:8px}.scn button{flex:1;font-size:.82em;padding:5px 0;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--mut)}
+.scn button[aria-pressed=true]{background:var(--gold);color:#2a1500;font-weight:700;border-color:var(--gold)}
+button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+main{flex:1;overflow-y:auto;padding:8px 16px 16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:9px;width:100%;text-align:left;display:block}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sub{font-size:.85em;color:var(--mut)}.h{font-weight:700;margin:6px 0}.big{font-size:1.15em;font-weight:900;text-align:right}
+.pill{padding:3px 10px;border-radius:8px;font-size:.88em;font-weight:700;color:#fff;white-space:nowrap}
+.ok{background:var(--ok)}.warn{background:var(--warn);color:#2a1a00}.org{background:var(--org);color:#2a1300}.bad{background:var(--bad)}.mut{background:#6b6b6b}.vio{background:var(--vio)}
+.bn{border-left:6px solid var(--ok);background:var(--panel);border-radius:12px;padding:10px 13px;margin-bottom:10px}
+.bn.abn{border-color:var(--org)}.bn.bad{border-color:var(--bad)}.bn.warn{border-color:var(--warn)}
+.tag{font-size:.75em;padding:1px 8px;border-radius:99px;background:#e0a96d33;color:var(--gold);font-weight:700;margin-left:6px}
+.near{background:linear-gradient(#f6d5c6,#e4aa95);color:#3a1c18;border-radius:16px;padding:2px 14px 8px;margin-bottom:10px}
+.near .row{padding:8px 0;border-bottom:1px solid #b9806b66}.near .row:last-child{border:0}.near .sub{color:#7a4a3e}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid button{background:linear-gradient(160deg,#3b2a2a,#150d0e);border:2px solid #b98a62;border-radius:16px;padding:12px 0;display:grid;place-items:center;gap:2px;font-weight:700}
+.grid span,.foot span{font-size:1.4em;filter:grayscale(1) brightness(1.9)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 10px}.chips button,.seg button{background:var(--p2);border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+.chips button[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--gold);color:#2a1500;font-weight:700;border-color:var(--gold)}
+.seg{display:flex;gap:6px;margin-bottom:10px}.seg button{flex:1}
+.opt.sel{border-color:var(--gold)}.kv{margin-top:8px}.kv b{display:block;font-size:.85em;color:var(--gold)}
+.src{font-size:.78em;color:var(--mut);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.st{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}.st i{width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none}.st b{margin-left:auto}
+.train{display:grid;grid-template-columns:54px 1fr auto;gap:8px;align-items:center}.no{font-weight:900;font-size:1.2em}
+.chat{display:flex;flex-direction:column;gap:8px}.me{align-self:flex-end;background:var(--gold);color:#2a1500;padding:7px 12px;border-radius:14px 14px 3px 14px;max-width:80%}
+.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:14px 14px 14px 3px;max-width:92%}
+.ask{display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--line);background:var(--ink)}.ask input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:8px 14px;color:var(--tx);font:inherit}
+.ask button{background:var(--gold);border:0;border-radius:99px;width:42px;color:#2a1500;font-weight:900}
+.tg{width:46px;height:26px;border-radius:99px;border:0;background:#5b474c;position:relative;flex:none}.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}.tg[aria-checked=true]{background:var(--ok)}.tg[aria-checked=true]::after{left:23px}
+.foot{display:flex;border-top:1px solid var(--line);background:var(--ink);flex:none}.foot button{flex:1;background:none;border:0;padding:8px 0 10px;color:var(--mut);font-size:.8em;display:grid;place-items:center}
+.foot button[aria-current=page]{color:var(--gold);font-weight:700}.foot .c span{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d2a2,#b3753f);border:3px solid #3a2420;margin-top:-24px;display:grid;place-items:center;color:#2a1500;font-size:1.5em;filter:none;box-shadow:0 0 0 2px #b98a62}
+html.lite .deco{display:none}.note{font-size:.78em;color:var(--mut);text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><b>旅運通</b><small id="clk"></small></div>
+<div class="scn" id="scn"></div></header>
+<main id="main"></main>
+<form class="ask" id="ask" hidden onsubmit="return false"><input id="q" placeholder="輸入您的問題…" aria-label="輸入您的問題"><button id="send" aria-label="送出">➤</button></form>
+<nav class="foot" id="foot"></nav>
+</div>
+<script>
+const S={pg:'home',scn:'normal',mode:'hsr',dest:'台北',dir:'S',opt:null,fs:1,hc:0,lite:0,less:0,tts:0,msgs:[]};
+const $=i=>document.getElementById(i),pad=n=>(n<10?'0':'')+n;
+const tp=()=>new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
+const nowMin=()=>{const d=tp();return d.getHours()*60+d.getMinutes()};
+const fmt=m=>{m=((m%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)};
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const ST={ok:['✓','正常','ok'],delay:['⏱','延誤','warn'],abn:['⚠','異常','org'],stop:['✕','停駛','bad'],stale:['？','資料未更新','mut'],est:['≈','預估','vio']};
+const pill=(c,t)=>`<span class="pill ${ST[c][2]}">${ST[c][0]} ${t||ST[c][1]}</span>`;
+const SCN={normal:'平常日',typhoon:'颱風警戒',outage:'大停電',holiday:'連假疏運'};
+const BN={normal:['ok','今日交通大致正常','各運具營運正常，國道一號部分路段車多。'],typhoon:['abn','颱風警戒','部分運具延誤或停駛，非必要行程建議延後，並先確認替代路線。'],outage:['bad','大範圍停電','部分運具停駛、號誌異常，已切換簡版資訊，請以現場公告為準。'],holiday:['warn','連假疏運','國道北上預計 14:00–19:00 最壅塞，建議提早或延後出發。']};
+const TM={normal:'現在出發即可。',typhoon:'風雨預計 16:00 後減弱（預估），非必要建議延後出發。',outage:'停電範圍仍在變動，請以現場公告為準。',holiday:'建議 12:00 前出發，或延後至 20:00 後（預估）。'};
+const MODES=[['hsr','🚄','高鐵'],['tra','🚆','台鐵'],['bus','🚌','客運'],['road','🛣️','公路'],['sea','🚢','海運'],['air','✈️','空運']];
+const SRC={hsr:'高鐵營運公告',tra:'台鐵營運公告',bus:'客運動態資料',road:'路況與事件資料',sea:'港務與航班資料',air:'機場與航班資料'};
+// [狀態, 現況, 原因, 預估恢復, 替代與換乘成本, 資料延遲(分)]
+const BASEM={hsr:['ok','正常營運，班次準點','—','—','無需替代',1],tra:['ok','正常營運','—','—','無需替代',1],bus:['ok','班次正常','—','—','無需替代',2],road:['ok','國道一號部分路段車多，其餘暢通','日常車流','—','無需替代',1],sea:['ok','正常營運','—','—','無需替代',5],air:['ok','正常營運','—','—','無需替代',5]};
+const OV={
+typhoon:{hsr:['abn','部分班次延誤 30–60 分，視風雨續調整','強風豪雨，沿線限速','預估 18:30 前逐步恢復（預估）','改搭台鐵新烏日站需多 1 次轉乘，或延後出發',2],tra:['abn','部分區間停駛','沿線淹水與邊坡警戒','待公告','改搭高鐵（仍營運）',3],bus:['stop','國道客運多數班次停駛','公路封閉與強風','待公告','改搭台鐵或高鐵',4],road:['abn','山區路段預警封閉，國道車速受限','豪雨與強風','視天氣','避開山區路段並延後出發',2],sea:['stop','全部航線停航','海面風浪過大','天氣好轉後公告','改搭空運（亦可能取消）',5],air:['stop','多數航班取消','強風','待公告','改搭高鐵',5]},
+outage:{hsr:['stop','台中—彰化區間暫停','供電設備異常（大範圍停電）','待公告','改搭客運，約多 1 次轉乘與 20 分鐘',2],tra:['stale','資料未更新','來源中斷','—','請洽車站或官方公告',47],bus:['delay','班次延誤約 20 分','路口號誌失效、車流回堵','視停電範圍','目前較可行的方案',3],road:['abn','多處路口號誌故障','停電','視電力恢復','改走國道、避開市區',3]},
+holiday:{hsr:['ok','正常營運，車廂擁擠，已加開班次','乘客量大','—','無需替代，建議提早到站',2],tra:['delay','平均延誤約 10 分，站內人潮多','乘客量大','—','改搭高鐵',2],bus:['delay','國道客運延誤 40–60 分','國道壅塞','壅塞時段後逐步改善','提早出發',3],road:['abn','國道一號北上壅塞，14:00–19:00 最嚴重（預估）','連假返鄉車流','預估 20:00 後紓解（預估）','改走國道三號，或提早／延後出發',2]}};
+const mi=m=>{const a=(OV[S.scn]&&OV[S.scn][m])||BASEM[m];return{c:a[5]>15?'stale':a[0],txt:a[1],why:a[2],eta:a[3],alt:a[4],age:a[5]}};
+const ITEMS={tra:[['自強號 171','新烏日 → 台北・2 號月台'],['區間車 2237','新烏日 → 彰化・1 號月台'],['區間快 3129','新烏日 → 員林・1 號月台']],bus:[['1820 台中—台北','業者 A'],['1833 台中—台北','業者 B'],['6899 台中—高雄','業者 A']],road:[['國道1號 台中系統北上','0.9 公里'],['國道3號 霧峰系統南下','12 公里'],['台74線 東向','3 公里']],sea:[['台中港—澎湖','今日 2 班'],['台中港—平潭','今日 1 班']],air:[['台中—澎湖','今日 2 班'],['台中—金門','今日 4 班']]};
+// 行程：[增加分鐘, 狀態] 或 'stop'/'stale'
+const BASE={台北:{hsr:58,tra:125,bus:150,car:120},高雄:{hsr:50,tra:150,bus:170,car:140}};
+const OVH={hsr:28,tra:35,bus:20,car:10},TR={hsr:1,tra:1,bus:1,car:0},FEE={台北:{hsr:700,tra:400,bus:300,car:350},高雄:{hsr:760,tra:450,bus:350,car:400}};
+const ADJ={normal:{hsr:[0,'ok'],tra:[0,'ok'],bus:[0,'ok'],car:[10,'delay']},typhoon:{hsr:[35,'abn'],tra:[60,'abn'],bus:'stop',car:[40,'abn']},outage:{hsr:'stop',tra:'stale',bus:[20,'delay'],car:[30,'abn']},holiday:{hsr:[10,'ok'],tra:[25,'delay'],bus:[60,'delay'],car:[90,'abn']}};
+const LB={hsr:['🚄','高鐵'],tra:['🚆','台鐵'],bus:['🚌','客運'],car:['🚗','自駕']};
+function opts(){return['hsr','tra','bus','car'].map(k=>{const a=ADJ[S.scn][k],ar=Array.isArray(a),m=mi(k==='car'?'road':k);return{k,ico:LB[k][0],lb:LB[k][1],min:ar?BASE[S.dest][k]+OVH[k]+a[0]:null,st:ar?a[1]:a,tr:TR[k],fee:FEE[S.dest][k],txt:m.txt,why:m.why}})}
+function best(){const L=opts().filter(o=>o.min!=null);L.sort((a,b)=>(a.min+(S.less?a.tr*15:0))-(b.min+(S.less?b.tr*15:0)));return L[0]}
+function chain(o){const d=S.dest,r=o.st==='ok'?'低':o.st==='delay'?'中':'高';
+ const sg={hsr:[['步行至高鐵台中站',8],['候車',10],['高鐵 → '+d,o.min-28],['出站轉乘',10]],tra:[['前往台鐵新烏日站',10],['候車',15],['台鐵 → '+d,o.min-35],['出站轉乘',10]],bus:[['前往客運站',10],['候車',10],['國道客運 → '+d,o.min-20]],car:[['前往台中系統交流道',10],['國道自駕 → '+d,o.min-10]]}[o.k];
+ if(o.min==null)return`<div class="card"><b>換乘鏈：${o.lb}</b><p class="sub">目前無法使用。${o.why!=='—'?'原因：'+o.why+'。':''}請參考其他選項。</p></div>`;
+ return`<div class="card"><div class="row"><b>換乘鏈：${o.lb}</b><span class="tag">銜接風險 ${r}</span></div>`+sg.map(s=>`<div class="st"><i></i><span>${s[0]}</span><b>${s[1]} 分</b></div>`).join('')+`<div class="src">全程約 ${o.min} 分・費用為示意估算</div></div>`}
+function hsrList(){const o=[],n=nowMin(),S1=S.dir==='S';let k=0;for(let t=S1?372:380;t<1410;t+=S1?17:19,k++){const i=k%3;o.push({k,no:(S1?801:802)+k*2,dep:t,to:(S1?['左營','台南','嘉義']:['南港','台北','桃園'])[i],dur:(S1?[47,32,16]:[58,54,39])[i]})}const L=o.filter(x=>x.dep>=n).slice(0,5);return L.length?L:o.slice(0,5)}
+function tst(x){const c=S.scn;if(c==='outage')return['stop',''];if(c==='typhoon')return['delay',(30+x.k%4*10)+' 分'];if(c==='holiday')return x.k%2?['ok','擁擠']:['est','加開班次'];return x.k%7===3?['delay','5 分']:['ok','準點']}
+const upd=m=>'更新 '+fmt(nowMin()-mi(m).age)+'・來源：'+SRC[m]+'（模擬）';
+function banner(){const b=BN[S.scn];return`<div class="bn ${b[0]}" role="status"><b>${b[1]}</b><div class="sub">${b[2]}</div></div>`}
+function home(){
+ const al=['hsr','tra','bus','road'].filter(m=>mi(m).c!=='ok').map(m=>{const x=mi(m),M=MODES.find(a=>a[0]===m);return`<div class="card"><div class="row"><b>${M[1]} ${M[2]}</b>${pill(x.c)}</div><div class="sub">${x.txt}</div></div>`}).join('')||'<div class="card sub">目前沒有影響您常用行程（台中 → 台北）的異常。</div>';
+ const nr=[['高鐵台中站','0.4 公里','hsr'],['台鐵新烏日站','0.6 公里','tra'],['台中系統交流道','0.9 公里','road']].map(r=>`<div class="row"><div><b>${r[0]}</b><div class="sub">${r[1]}</div></div>${pill(mi(r[2]).c)}</div>`).join('');
+ return banner()+`<div class="h">我要去哪</div><div class="chips"><button data-dest="台北">📍 台中 → 台北</button><button data-dest="高雄">📍 台中 → 高雄</button></div><div class="h">與我有關的警示</div>${al}<div class="h">鄰近場站</div><div class="near">${nr}</div><div class="h">運具</div><div class="grid">${MODES.map(m=>`<button data-go="${m[0]}"><span class="deco">${m[1]}</span>${m[2]}</button>`).join('')}</div>`}
+function trip(){const B=best(),L=opts(),sel=L.find(o=>o.k===S.opt&&o.min!=null)||B||L[0];
+ return banner()+`<div class="seg">${['台北','高雄'].map(d=>`<button data-dest="${d}" aria-pressed="${S.dest===d}" data-stay="1">台中 → ${d}</button>`).join('')}</div><div class="card"><b>出發時機建議</b><div class="sub">${TM[S.scn]}</div></div>`+L.map(o=>`<button class="card opt ${o.k===sel.k?'sel':''}" data-o="${o.k}"><div class="row"><div><b>${o.ico} ${o.lb}</b>${B&&o.k===B.k?'<span class="tag">推薦</span>':''}<div class="sub">${o.txt}</div></div><div><div class="big">${o.min==null?'—':'約 '+o.min+' 分'}</div>${pill(o.st)}</div></div><div class="sub">換乘 ${o.tr} 次・約 NT$${o.fee}（示意）</div></button>`).join('')+chain(sel)+`<p class="note">${S.less?'已啟用「少轉乘優先」。':''}全程時間含前往場站與候車。</p>`}
+function modes(){const m=S.mode,x=mi(m);let h=`<div class="chips">${MODES.map(a=>`<button data-m="${a[0]}" aria-pressed="${m===a[0]}">${a[1]} ${a[2]}</button>`).join('')}</div>`;
+ h+=`<div class="card"><div class="row"><b>現況</b>${pill(x.c)}</div><p>${x.txt}</p><div class="kv"><b>原因與預估恢復時間</b>${x.why}${x.eta!=='—'?'；'+x.eta:''}</div><div class="kv"><b>替代方案與換乘成本</b>${x.alt}</div>${x.c!=='ok'?'<button class="chips" style="background:none;border:0;padding:0" data-gotrip="1"><span class="tag" style="margin:8px 0 0">查看替代行程 ›</span></button>':''}<div class="src">${upd(m)}</div></div>`;
+ if(m==='hsr'){h+=`<div class="seg"><button data-d="S" aria-pressed="${S.dir==='S'}">南下</button><button data-d="N" aria-pressed="${S.dir==='N'}">北上</button></div><div class="sub" style="margin-bottom:6px">起站 台中</div>`+hsrList().map(t=>{const s=tst(t);return`<div class="card train"><div class="no">${t.no}</div><div><b>${fmt(t.dep)} → ${fmt(t.dep+t.dur)}</b><div class="sub">台中 → ${t.to}・約 ${t.dur} 分</div></div>${pill(s[0],s[1]||undefined)}</div>`}).join('')}
+ else h+=ITEMS[m].map((it,i)=>`<div class="card row"><div><b>${it[0]}</b><div class="sub">${it[1]}${m==='tra'||m==='bus'?'・'+fmt(nowMin()+8+i*13):''}</div></div>${pill(x.c)}</div>`).join('');
+ return h}
+function best2(){const B=best();return B?`建議${B.lb}，全程約 ${B.min} 分（台中 → ${S.dest}）。${TM[S.scn]}`:'目前各運具都無法確認，請以官方公告為準。'}
+function reply(q){const M=/高鐵|為什麼|異常|停/.test(q)?'hsr':/國道|路況|塞/.test(q)?'road':null;
+ if(M){const x=mi(M);return`${M==='hsr'?'高鐵':'公路'}目前：${x.txt}。原因：${x.why}。替代：${x.alt}。<div class="src">${upd(M)}</div>`}
+ if(/怎麼|去|台北|高雄|最快|行程|推薦/.test(q)){if(/高雄/.test(q))S.dest='高雄';else if(/台北/.test(q))S.dest='台北';return best2()+`<div class="src">${upd('road')}</div>`}
+ return'我可以回答行程比較、營運異常原因與路況。目前無法確認的內容，請以官方公告為準。'}
+function ai(){if(!S.msgs.length)S.msgs.push(['bot','您好，我是旅運小幫手。回答只根據目前資料，並附更新時間。']);return`<div class="chat">${S.msgs.map(m=>`<div class="${m[0]}">${m[1]}</div>`).join('')}</div><div class="chips" style="margin-top:10px">${['台中到台北怎麼去？','高鐵為什麼異常？','國道一號塞車嗎？'].map(c=>`<button data-q="${c}">${c}</button>`).join('')}</div>`}
+const tg=k=>`<button class="tg" role="switch" data-tg="${k}" aria-checked="${!!S[k]}"></button>`;
+function me(){const r=(l,s,c)=>`<div class="card row"><div><b>${l}</b><div class="sub">${s}</div></div>${c}</div>`;
+ return`<div class="h">偏好與無障礙</div>`+r('少轉乘優先','路線排序時降低換乘次數多的選項',tg('less'))+r('簡版模式','文字為主、隱藏裝飾，停電時自動啟用',tg('lite'))+r('高對比模式','加強文字與背景對比',tg('hc'))+r('語音朗讀','AI 小幫手回覆時朗讀',tg('tts'))+`<div class="card"><b>字體大小</b><div class="seg" style="margin:8px 0 0">${[[1,'標準'],[1.15,'大'],[1.3,'特大']].map(a=>`<button data-fs="${a[0]}" aria-pressed="${S.fs===a[0]}">${a[1]}</button>`).join('')}</div></div><div class="card"><b>聯絡我們</b><div class="sub">客服與意見回饋（模擬）</div></div>`}
+function render(){const d=tp(),lite=S.lite||S.scn==='outage';
+ document.documentElement.dataset.hc=S.hc?1:0;document.documentElement.classList.toggle('lite',!!lite);document.documentElement.style.setProperty('--fs',S.fs);
+ $('clk').textContent='現在 '+pad(d.getHours())+':'+pad(d.getMinutes())+(lite?'・簡版':'');
+ $('scn').innerHTML=Object.keys(SCN).map(k=>`<button data-s="${k}" aria-pressed="${S.scn===k}">${SCN[k]}</button>`).join('');
+ $('main').innerHTML={home,trip,modes,ai,me}[S.pg]();$('ask').hidden=S.pg!=='ai';
+ $('foot').innerHTML=[['home','🏠','首頁'],['trip','🧭','行程'],['ai','✦','AI小幫手'],['modes','🚦','運具'],['me','⚙️','我的']].map(x=>`<button data-p="${x[0]}" ${x[0]==='ai'?'class="c"':''} ${S.pg===x[0]?'aria-current="page"':''}><span>${x[1]}</span>${x[2]}</button>`).join('')}
+function say(q){S.msgs.push(['me',esc(q)],['bot',reply(q)]);render();const m=$('main');m.scrollTop=m.scrollHeight;if(S.tts){try{const u=new SpeechSynthesisUtterance(m.querySelector('.chat').lastChild.textContent);u.lang='zh-TW';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}}
+document.addEventListener('click',e=>{const g=a=>{const n=e.target.closest('['+a+']');return n&&n.getAttribute(a)};let v;
+ if(v=g('data-p'))S.pg=v;else if(v=g('data-s')){S.scn=v;S.opt=null}else if(v=g('data-dest')){S.dest=v;S.opt=null;S.pg='trip'}
+ else if(v=g('data-go')){S.mode=v;S.pg='modes'}else if(v=g('data-m'))S.mode=v;else if(v=g('data-d'))S.dir=v;
+ else if(v=g('data-o'))S.opt=v;else if(g('data-gotrip'))S.pg='trip';else if(v=g('data-fs'))S.fs=+v;
+ else if(v=g('data-tg'))S[v]=S[v]?0:1;else if(v=g('data-q'))return say(v);
+ else if(e.target.closest('#send')){const i=$('q'),q=i.value.trim();if(q){i.value='';return say(q)}return}else return;render()});
+setInterval(render,60000);render();
+</script>
+</body>
+</html>
