@@ -3,131 +3,206 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>旅運通 重新設計 POC｜行程優先 × 情境自適應</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>旅運通・全運具整合平台 POC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
 <style>
-:root{--pg:#e9e4e1;--ink:#1b1215;--panel:#2a1c20;--p2:#35242a;--line:#4a343b;--tx:#f6ecea;--mut:#b9a3a6;--gold:#e0a96d;--ok:#0fa863;--warn:#f5a524;--org:#f08a24;--bad:#f01e1e;--vio:#7a4de8;--fs:1;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
-@media(prefers-color-scheme:dark){:root{--pg:#0d0809}}
-html[data-hc="1"]{--ink:#000;--panel:#000;--p2:#111;--line:#fff;--tx:#fff;--mut:#e6e6e6}
+:root{--pg:#e9e4e1;--ink:#1b1215;--panel:#2a1c20;--panel2:#35242a;--line:#4a343b;--tx:#f6ecea;--mut:#b9a3a6;--org:#f08a24;--ok:#0fa863;--warn:#f5a524;--bad:#f01e1e;--vio:#7a4de8;--fs:1;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0d0809}}
+:root[data-theme="dark"]{--pg:#0d0809}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html[data-hc="1"]{--ink:#000;--panel:#000;--panel2:#111;--line:#fff;--tx:#fff;--mut:#e6e6e6}
 *{box-sizing:border-box;margin:0}
-body{background:var(--pg);font:calc(14px*var(--fs))/1.5 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--tx);display:flex;justify-content:center}
-.app{width:100%;max-width:420px;height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 40% at 50% 6%,#d98a5a44,transparent 70%),linear-gradient(180deg,#8a4a3a,#4a2828 30%,#221315)}
-html[data-hc="1"] .app,html.lite .app{background:var(--ink)}
-@media(min-width:460px){.app{margin:16px 0;height:min(880px,calc(100vh - 32px));border-radius:28px;overflow:hidden;box-shadow:0 20px 60px #0006}}
-header{padding:12px 16px 6px;flex:none}
-.brand{display:flex;justify-content:space-between;align-items:baseline}.brand b{font-size:1.7em;font-weight:900;letter-spacing:.06em;text-shadow:0 0 12px #ff9a5a88}.brand small{color:var(--mut)}
-.scn{display:flex;gap:5px;margin-top:8px}.scn button{flex:1;font-size:.82em;padding:5px 0;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--mut)}
-.scn button[aria-pressed=true]{background:var(--gold);color:#2a1500;font-weight:700;border-color:var(--gold)}
-button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-main{flex:1;overflow-y:auto;padding:8px 16px 16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:9px;width:100%;text-align:left;display:block}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.sub{font-size:.85em;color:var(--mut)}.h{font-weight:700;margin:6px 0}.big{font-size:1.15em;font-weight:900;text-align:right}
-.pill{padding:3px 10px;border-radius:8px;font-size:.88em;font-weight:700;color:#fff;white-space:nowrap}
-.ok{background:var(--ok)}.warn{background:var(--warn);color:#2a1a00}.org{background:var(--org);color:#2a1300}.bad{background:var(--bad)}.mut{background:#6b6b6b}.vio{background:var(--vio)}
-.bn{border-left:6px solid var(--ok);background:var(--panel);border-radius:12px;padding:10px 13px;margin-bottom:10px}
-.bn.abn{border-color:var(--org)}.bn.bad{border-color:var(--bad)}.bn.warn{border-color:var(--warn)}
-.tag{font-size:.75em;padding:1px 8px;border-radius:99px;background:#e0a96d33;color:var(--gold);font-weight:700;margin-left:6px}
-.near{background:linear-gradient(#f6d5c6,#e4aa95);color:#3a1c18;border-radius:16px;padding:2px 14px 8px;margin-bottom:10px}
-.near .row{padding:8px 0;border-bottom:1px solid #b9806b66}.near .row:last-child{border:0}.near .sub{color:#7a4a3e}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.grid button{background:linear-gradient(160deg,#3b2a2a,#150d0e);border:2px solid #b98a62;border-radius:16px;padding:12px 0;display:grid;place-items:center;gap:2px;font-weight:700}
-.grid span,.foot span{font-size:1.4em;filter:grayscale(1) brightness(1.9)}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 10px}.chips button,.seg button{background:var(--p2);border:1px solid var(--line);border-radius:99px;padding:6px 12px}
-.chips button[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--gold);color:#2a1500;font-weight:700;border-color:var(--gold)}
-.seg{display:flex;gap:6px;margin-bottom:10px}.seg button{flex:1}
-.opt.sel{border-color:var(--gold)}.kv{margin-top:8px}.kv b{display:block;font-size:.85em;color:var(--gold)}
-.src{font-size:.78em;color:var(--mut);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
-.st{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}.st i{width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none}.st b{margin-left:auto}
-.train{display:grid;grid-template-columns:54px 1fr auto;gap:8px;align-items:center}.no{font-weight:900;font-size:1.2em}
-.chat{display:flex;flex-direction:column;gap:8px}.me{align-self:flex-end;background:var(--gold);color:#2a1500;padding:7px 12px;border-radius:14px 14px 3px 14px;max-width:80%}
-.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:14px 14px 14px 3px;max-width:92%}
-.ask{display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--line);background:var(--ink)}.ask input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:8px 14px;color:var(--tx);font:inherit}
-.ask button{background:var(--gold);border:0;border-radius:99px;width:42px;color:#2a1500;font-weight:900}
-.tg{width:46px;height:26px;border-radius:99px;border:0;background:#5b474c;position:relative;flex:none}.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}.tg[aria-checked=true]{background:var(--ok)}.tg[aria-checked=true]::after{left:23px}
-.foot{display:flex;border-top:1px solid var(--line);background:var(--ink);flex:none}.foot button{flex:1;background:none;border:0;padding:8px 0 10px;color:var(--mut);font-size:.8em;display:grid;place-items:center}
-.foot button[aria-current=page]{color:var(--gold);font-weight:700}.foot .c span{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d2a2,#b3753f);border:3px solid #3a2420;margin-top:-24px;display:grid;place-items:center;color:#2a1500;font-size:1.5em;filter:none;box-shadow:0 0 0 2px #b98a62}
-html.lite .deco{display:none}.note{font-size:.78em;color:var(--mut);text-align:center;margin-top:6px}
+body{background:var(--pg);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--tx);display:flex;justify-content:center;min-height:100vh;font-size:calc(14px*var(--fs))}
+.app{width:100%;max-width:420px;height:100vh;background:radial-gradient(120% 40% at 50% 8%,#d98a5a55,transparent 70%),linear-gradient(180deg,#9a5440 0,#6b3530 26%,#3a1f22 60%,#221315 100%);display:flex;flex-direction:column}
+html[data-hc="1"] .app{background:#000}
+@media(min-width:460px){.app{margin:16px 0;height:min(860px,calc(100vh - 32px));border-radius:28px;overflow:hidden;box-shadow:0 20px 60px #0006}}
+header{padding:14px 18px 8px;flex:none}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#1d3566,#0c1a3a);border:3px solid #d9b26a;display:grid;place-items:center;font-style:normal;font-weight:900;color:#f3d79a;flex:none}
+.brand b{font-family:"Noto Serif TC",serif;font-size:2.1em;font-weight:900;letter-spacing:.06em;color:#fff;font-style:italic;text-shadow:0 2px 0 #7a2a1a,0 0 14px #ff9a5a99}
+.brand span{font-size:.85em;background:linear-gradient(#f6d0bf,#d89a86);color:#4a2218;padding:4px 12px;border-radius:99px;font-weight:700;margin-left:auto;white-space:nowrap}
+.upd{font-size:.8em;color:var(--mut);margin-top:4px;display:flex;gap:8px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px #22b07d33;flex:none}
+.mq{margin-top:8px;background:#fff;color:#3a1c1c;border-radius:10px;padding:7px 10px;font-size:.9em;white-space:nowrap;display:flex;gap:8px;align-items:center;box-shadow:0 2px 8px #0004}.mw{overflow:hidden;flex:1}
+.mq span{display:inline-block;padding-left:100%;animation:mq 16s linear infinite}
+@keyframes mq{to{transform:translateX(-100%)}}
+@media(prefers-reduced-motion:reduce){.mq span{animation:none;padding:0}.mw{overflow:auto}}
+main{flex:1;overflow-y:auto;padding:10px 18px 18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--org);outline-offset:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:9px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nm{font-weight:700;font-size:1.1em}.sub{font-size:.85em;color:var(--mut);margin-top:2px}
+.pill{padding:5px 14px;min-width:64px;text-align:center;border-radius:8px;font-size:.95em;font-weight:700;color:#fff;white-space:nowrap;box-shadow:inset 0 1px 0 #fff5,0 2px 4px #0005}.near{background:linear-gradient(#f6d5c6,#e4aa95);color:#3a1c18;border-radius:16px;padding:0 14px 10px;margin-bottom:6px;box-shadow:0 6px 18px #0005}.nh{padding:10px 0;border-bottom:1px solid #b9806b88}.nh b{font-size:1.2em}.all{background:none;border:0;color:#3a1c18;font-weight:700}.nr{padding:9px 0;border-bottom:1px solid #b9806b55}.near .sub{color:#7a4a3e}.near .sw{background:#fff7;border-color:#b9806b;color:#3a1c18}
+.ok{background:var(--ok)}.warn{background:var(--warn);color:#2a1a00}.bad{background:var(--bad)}.vio{background:var(--vio)}
+.h3{font-weight:700;font-size:1.05em;margin:4px 0 8px}
+.modes{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px}
+.modes button{flex:1;min-width:54px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 2px;font-size:.85em;display:grid;gap:2px;place-items:center}
+.modes button span,.grid button span{font-size:1.5em}
+.modes button[aria-pressed="true"]{border-color:var(--org);background:var(--panel2);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.grid button span,.modes button span,.foot button span{filter:grayscale(1) brightness(1.9)}
+.grid button{background:linear-gradient(160deg,#3b2a2a,#150d0e);border:2px solid #b98a62;border-radius:18px;padding:16px 0;display:grid;place-items:center;gap:6px;font-weight:700;color:#fff;box-shadow:inset 0 0 0 2px #0008,0 4px 10px #0006}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:10px;overflow-x:auto}
+.tabs button{flex:1;background:none;border:0;color:var(--mut);padding:9px 6px;white-space:nowrap;border-bottom:3px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--tx);font-weight:700;border-color:var(--org)}
+.seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font-weight:700;padding:8px;border-radius:9px}
+.seg button[aria-pressed="true"]{background:var(--org);color:#2a1500}
+.train{display:grid;grid-template-columns:60px 1fr auto;gap:10px;align-items:center}
+.no{font-weight:900;font-size:1.25em}.no small{display:block;font-weight:400;font-size:.65em;color:var(--mut)}
+.tm{font-size:1.3em;font-weight:700;font-variant-numeric:tabular-nums}.tm i{font-style:normal;color:var(--mut);margin:0 5px;font-size:.8em}
+.next{border-color:var(--org)}
+.banner{background:#e5484d26;border:1px solid var(--bad);border-radius:12px;padding:9px 12px;margin-bottom:10px}
+.go{text-decoration:none;background:var(--org);color:#2a1500;font-weight:700;padding:8px 13px;border-radius:10px;white-space:nowrap}
+.tag{font-size:.75em;padding:2px 8px;border-radius:99px;background:#f08a2433;color:var(--org);margin-left:6px;font-weight:700}
+.ico{min-width:40px;height:40px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-weight:900;font-size:.85em;padding:0 4px}
+.left{display:flex;gap:11px;align-items:center}
+.sw{background:var(--panel2);border:1px solid var(--line);padding:6px 12px;border-radius:99px}
+.note{font-size:.8em;color:var(--mut);text-align:center;margin-top:6px}
+.legend{display:flex;gap:10px;font-size:.8em;color:var(--mut);justify-content:center;margin:6px 0 10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+svg.map{width:100%;border-radius:12px;background:#15100f;border:1px solid var(--line)}
+.chat{display:flex;flex-direction:column;gap:9px}
+.me{align-self:flex-end;background:var(--org);color:#2a1500;padding:8px 12px;border-radius:14px 14px 3px 14px;max-width:80%}
+.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line);padding:9px 12px;border-radius:14px 14px 14px 3px;max-width:92%}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.chips button{background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:.9em}
+.cmp{width:100%;border-collapse:collapse;margin-top:6px}.cmp td{padding:6px 2px;border-top:1px solid var(--line)}
+.ask{display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--line);background:var(--ink);flex:none}
+.ask input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:9px 14px;color:var(--tx);font:inherit}
+.ask button{background:var(--org);border:0;border-radius:99px;width:42px;color:#2a1500;font-weight:900}
+.set{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.set .seg{margin:0;min-width:150px}
+.tg{width:46px;height:26px;border-radius:99px;border:0;background:#5b474c;position:relative;flex:none}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.tg[aria-checked="true"]{background:var(--ok)}.tg[aria-checked="true"]::after{left:23px}
+.foot{display:flex;border-top:1px solid var(--line);background:var(--ink);flex:none}
+.foot button{flex:1;background:none;border:0;padding:9px 0 11px;color:var(--mut);font-size:.8em;display:grid;gap:2px;place-items:center}
+.foot button span{font-size:1.5em}.foot button[aria-current="page"]{color:var(--org);font-weight:700}.foot .c span{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d2a2,#b3753f);border:3px solid #3a2420;margin-top:-26px;display:grid;place-items:center;color:#2a1500;font-size:1.6em;box-shadow:0 0 0 2px #b98a62,0 4px 12px #0008;filter:none}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><b>旅運通</b><small id="clk"></small></div>
-<div class="scn" id="scn"></div></header>
+<header>
+  <div class="brand"><i class="logo">運</i><b>旅運通</b><span id="slogan"></span></div>
+  <div class="upd"><span class="dot"></span><span id="upd"></span></div>
+  <div class="mq" id="mq" aria-live="polite"></div>
+</header>
 <main id="main"></main>
 <form class="ask" id="ask" hidden onsubmit="return false"><input id="q" placeholder="輸入您的問題…" aria-label="輸入您的問題"><button id="send" aria-label="送出">➤</button></form>
 <nav class="foot" id="foot"></nav>
 </div>
 <script>
-const S={pg:'home',scn:'normal',mode:'hsr',dest:'台北',dir:'S',opt:null,fs:1,hc:0,lite:0,less:0,tts:0,msgs:[]};
-const $=i=>document.getElementById(i),pad=n=>(n<10?'0':'')+n;
-const tp=()=>new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
-const nowMin=()=>{const d=tp();return d.getHours()*60+d.getMinutes()};
-const fmt=m=>{m=((m%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)};
-const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const ST={ok:['✓','正常','ok'],delay:['⏱','延誤','warn'],abn:['⚠','異常','org'],stop:['✕','停駛','bad'],stale:['？','資料未更新','mut'],est:['≈','預估','vio']};
-const pill=(c,t)=>`<span class="pill ${ST[c][2]}">${ST[c][0]} ${t||ST[c][1]}</span>`;
-const SCN={normal:'平常日',typhoon:'颱風警戒',outage:'大停電',holiday:'連假疏運'};
-const BN={normal:['ok','今日交通大致正常','各運具營運正常，國道一號部分路段車多。'],typhoon:['abn','颱風警戒','部分運具延誤或停駛，非必要行程建議延後，並先確認替代路線。'],outage:['bad','大範圍停電','部分運具停駛、號誌異常，已切換簡版資訊，請以現場公告為準。'],holiday:['warn','連假疏運','國道北上預計 14:00–19:00 最壅塞，建議提早或延後出發。']};
-const TM={normal:'現在出發即可。',typhoon:'風雨預計 16:00 後減弱（預估），非必要建議延後出發。',outage:'停電範圍仍在變動，請以現場公告為準。',holiday:'建議 12:00 前出發，或延後至 20:00 後（預估）。'};
-const MODES=[['hsr','🚄','高鐵'],['tra','🚆','台鐵'],['bus','🚌','客運'],['road','🛣️','公路'],['sea','🚢','海運'],['air','✈️','空運']];
-const SRC={hsr:'高鐵營運公告',tra:'台鐵營運公告',bus:'客運動態資料',road:'路況與事件資料',sea:'港務與航班資料',air:'機場與航班資料'};
-// [狀態, 現況, 原因, 預估恢復, 替代與換乘成本, 資料延遲(分)]
-const BASEM={hsr:['ok','正常營運，班次準點','—','—','無需替代',1],tra:['ok','正常營運','—','—','無需替代',1],bus:['ok','班次正常','—','—','無需替代',2],road:['ok','國道一號部分路段車多，其餘暢通','日常車流','—','無需替代',1],sea:['ok','正常營運','—','—','無需替代',5],air:['ok','正常營運','—','—','無需替代',5]};
-const OV={
-typhoon:{hsr:['abn','部分班次延誤 30–60 分，視風雨續調整','強風豪雨，沿線限速','預估 18:30 前逐步恢復（預估）','改搭台鐵新烏日站需多 1 次轉乘，或延後出發',2],tra:['abn','部分區間停駛','沿線淹水與邊坡警戒','待公告','改搭高鐵（仍營運）',3],bus:['stop','國道客運多數班次停駛','公路封閉與強風','待公告','改搭台鐵或高鐵',4],road:['abn','山區路段預警封閉，國道車速受限','豪雨與強風','視天氣','避開山區路段並延後出發',2],sea:['stop','全部航線停航','海面風浪過大','天氣好轉後公告','改搭空運（亦可能取消）',5],air:['stop','多數航班取消','強風','待公告','改搭高鐵',5]},
-outage:{hsr:['stop','台中—彰化區間暫停','供電設備異常（大範圍停電）','待公告','改搭客運，約多 1 次轉乘與 20 分鐘',2],tra:['stale','資料未更新','來源中斷','—','請洽車站或官方公告',47],bus:['delay','班次延誤約 20 分','路口號誌失效、車流回堵','視停電範圍','目前較可行的方案',3],road:['abn','多處路口號誌故障','停電','視電力恢復','改走國道、避開市區',3]},
-holiday:{hsr:['ok','正常營運，車廂擁擠，已加開班次','乘客量大','—','無需替代，建議提早到站',2],tra:['delay','平均延誤約 10 分，站內人潮多','乘客量大','—','改搭高鐵',2],bus:['delay','國道客運延誤 40–60 分','國道壅塞','壅塞時段後逐步改善','提早出發',3],road:['abn','國道一號北上壅塞，14:00–19:00 最嚴重（預估）','連假返鄉車流','預估 20:00 後紓解（預估）','改走國道三號，或提早／延後出發',2]}};
-const mi=m=>{const a=(OV[S.scn]&&OV[S.scn][m])||BASEM[m];return{c:a[5]>15?'stale':a[0],txt:a[1],why:a[2],eta:a[3],alt:a[4],age:a[5]}};
-const ITEMS={tra:[['自強號 171','新烏日 → 台北・2 號月台'],['區間車 2237','新烏日 → 彰化・1 號月台'],['區間快 3129','新烏日 → 員林・1 號月台']],bus:[['1820 台中—台北','業者 A'],['1833 台中—台北','業者 B'],['6899 台中—高雄','業者 A']],road:[['國道1號 台中系統北上','0.9 公里'],['國道3號 霧峰系統南下','12 公里'],['台74線 東向','3 公里']],sea:[['台中港—澎湖','今日 2 班'],['台中港—平潭','今日 1 班']],air:[['台中—澎湖','今日 2 班'],['台中—金門','今日 4 班']]};
-// 行程：[增加分鐘, 狀態] 或 'stop'/'stale'
-const BASE={台北:{hsr:58,tra:125,bus:150,car:120},高雄:{hsr:50,tra:150,bus:170,car:140}};
-const OVH={hsr:28,tra:35,bus:20,car:10},TR={hsr:1,tra:1,bus:1,car:0},FEE={台北:{hsr:700,tra:400,bus:300,car:350},高雄:{hsr:760,tra:450,bus:350,car:400}};
-const ADJ={normal:{hsr:[0,'ok'],tra:[0,'ok'],bus:[0,'ok'],car:[10,'delay']},typhoon:{hsr:[35,'abn'],tra:[60,'abn'],bus:'stop',car:[40,'abn']},outage:{hsr:'stop',tra:'stale',bus:[20,'delay'],car:[30,'abn']},holiday:{hsr:[10,'ok'],tra:[25,'delay'],bus:[60,'delay'],car:[90,'abn']}};
-const LB={hsr:['🚄','高鐵'],tra:['🚆','台鐵'],bus:['🚌','客運'],car:['🚗','自駕']};
-function opts(){return['hsr','tra','bus','car'].map(k=>{const a=ADJ[S.scn][k],ar=Array.isArray(a),m=mi(k==='car'?'road':k);return{k,ico:LB[k][0],lb:LB[k][1],min:ar?BASE[S.dest][k]+OVH[k]+a[0]:null,st:ar?a[1]:a,tr:TR[k],fee:FEE[S.dest][k],txt:m.txt,why:m.why}})}
-function best(){const L=opts().filter(o=>o.min!=null);L.sort((a,b)=>(a.min+(S.less?a.tr*15:0))-(b.min+(S.less?b.tr*15:0)));return L[0]}
-function chain(o){const d=S.dest,r=o.st==='ok'?'低':o.st==='delay'?'中':'高';
- const sg={hsr:[['步行至高鐵台中站',8],['候車',10],['高鐵 → '+d,o.min-28],['出站轉乘',10]],tra:[['前往台鐵新烏日站',10],['候車',15],['台鐵 → '+d,o.min-35],['出站轉乘',10]],bus:[['前往客運站',10],['候車',10],['國道客運 → '+d,o.min-20]],car:[['前往台中系統交流道',10],['國道自駕 → '+d,o.min-10]]}[o.k];
- if(o.min==null)return`<div class="card"><b>換乘鏈：${o.lb}</b><p class="sub">目前無法使用。${o.why!=='—'?'原因：'+o.why+'。':''}請參考其他選項。</p></div>`;
- return`<div class="card"><div class="row"><b>換乘鏈：${o.lb}</b><span class="tag">銜接風險 ${r}</span></div>`+sg.map(s=>`<div class="st"><i></i><span>${s[0]}</span><b>${s[1]} 分</b></div>`).join('')+`<div class="src">全程約 ${o.min} 分・費用為示意估算</div></div>`}
-function hsrList(){const o=[],n=nowMin(),S1=S.dir==='S';let k=0;for(let t=S1?372:380;t<1410;t+=S1?17:19,k++){const i=k%3;o.push({k,no:(S1?801:802)+k*2,dep:t,to:(S1?['左營','台南','嘉義']:['南港','台北','桃園'])[i],dur:(S1?[47,32,16]:[58,54,39])[i]})}const L=o.filter(x=>x.dep>=n).slice(0,5);return L.length?L:o.slice(0,5)}
-function tst(x){const c=S.scn;if(c==='outage')return['stop',''];if(c==='typhoon')return['delay',(30+x.k%4*10)+' 分'];if(c==='holiday')return x.k%2?['ok','擁擠']:['est','加開班次'];return x.k%7===3?['delay','5 分']:['ok','準點']}
-const upd=m=>'更新 '+fmt(nowMin()-mi(m).age)+'・來源：'+SRC[m]+'（模擬）';
-function banner(){const b=BN[S.scn];return`<div class="bn ${b[0]}" role="status"><b>${b[1]}</b><div class="sub">${b[2]}</div></div>`}
+var S={pg:'home',mode:'hsr',sub:0,dir:'S',abn:false,lang:'zh',fs:1,hc:false,tts:true,tip:false,msgs:[]};
+var EN={'首頁':'Home','探索':'Explore','AI小幫手':'AI Assistant','設定':'Settings','高鐵':'HSR','台鐵':'TRA','客運':'Bus','公路':'Road','海運':'Sea','空運':'Air','鄰近場站':'Nearby stations','即時班表':'Live timetable','替代方案':'Alternatives','即時班次':'Live departures','異常資訊':'Disruptions','鄰近道路':'Nearby roads','即時路況':'Live traffic','重要路況':'Key incidents','替代道路':'Alt. roads','通阻資訊':'Closures','營運資訊':'Operations','機場營運資訊':'Airport ops','正常':'Normal','異常':'Abnormal','營運異常':'Disrupted','正常營運':'Operating','準點':'On time','南下':'Southbound','北上':'Northbound','導航':'Navigate','暢通':'Clear','車多':'Busy','壅塞':'Congested','停航':'Suspended','一般設定':'General','無障礙設定':'Accessibility','語言選擇':'Language','字體大小':'Font size','顯示模式':'Display','語音功能':'Voice','語音朗讀':'Read aloud','語音提示':'Voice alerts','標準':'Standard','大':'Large','特大':'X-Large','標準模式':'Standard','高對比模式':'High contrast','鄰近場站 ':'Nearby','多運具旅運服務':'Multimodal travel','更新時間':'Updated','目前位置':'You are here','建議':'Suggested','最快':'Fastest','AI助理':'AI Assistant','聯絡我們':'Contact us','查看全部':'See all'};
+function t(s){return S.lang==='en'&&EN[s]||s}
+function pad(n){return (n<10?'0':'')+n}
+function tp(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}))}
+function nowMin(){var d=tp();return d.getHours()*60+d.getMinutes()}
+function fmt(m){m=m%1440;return pad(Math.floor(m/60))+':'+pad(m%60)}
+var MODES=[['hsr','🚄','高鐵'],['tra','🚆','台鐵'],['bus','🚌','客運'],['road','🛣️','公路'],['sea','🚢','海運'],['air','✈️','空運']];
+var SUB={hsr:['鄰近場站','即時班表','替代方案'],tra:['鄰近場站','即時班表','替代方案'],bus:['鄰近場站','即時班次','異常資訊','替代方案'],road:['鄰近道路','即時路況','重要路況','替代道路'],sea:['通阻資訊','營運資訊','替代方案'],air:['通阻資訊','機場營運資訊','替代方案']};
+function pill(x,c){return '<span class="pill '+c+'">'+t(x)+'</span>'}
+function card(a,b,x,c){return '<div class="card row"><div><div class="nm">'+t(a)+'</div><div class="sub">'+b+'</div></div>'+pill(x,c)+'</div>'}
+function alts(L){return L.map(function(a){return '<div class="card row"><div class="left"><div class="ico">'+a[0]+'</div><div><div class="nm">'+a[1]+(a[4]?'<span class="tag">'+t('建議')+'</span>':'')+'</div><div class="sub">'+a[2]+'</div></div></div><a class="go" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(a[3])+'">'+t('導航')+'</a></div>'}).join('')+'<p class="note">導航將開啟地圖 App，POC 未串接正式路線資料</p>'}
+function demo(){return '<div class="row sub" style="margin-top:6px"><span>展示用：模擬台中站異常</span><button class="sw" data-a="abn">'+(S.abn?'恢復正常':'切換為異常')+'</button></div>'}
+function status(x){if(S.abn&&x.no%3===0)return['異常停駛','bad'];if(S.abn)return['延誤 '+(x.late||8)+' 分','warn'];return x.late?['誤點 '+x.late+' 分','warn']:['準點','ok']}
+function hsr(dir){
+  var DEST={S:[['左營',47],['台南',32],['嘉義',16]],N:[['南港',58],['台北',54],['桃園',39]]}[dir],out=[],k=0,nm=nowMin();
+  for(var tt=dir==='S'?372:380;tt<1410;tt+=dir==='S'?17:19,k++){var d=DEST[k%3];out.push({no:(dir==='S'?801:802)+k*2,dep:tt,dur:d[1],to:d[0],late:k%7===3?(k%2?5:12):0})}
+  var L=out.filter(function(x){return x.dep>=nm}).slice(0,6);return L.length?L:out.slice(0,6)}
+var ALT_HSR=function(){return[['台鐵','台鐵新烏日站','步行約 3 分到站，區間車往彰化／台中，約 15 分一班','新烏日站',S.abn],['客運','國道客運','高鐵台中站往台北／高雄，約每 30 分一班','高鐵台中站 客運'],['公路','國道一號自駕','台中系統交流道上國道，注意即時路況','台中系統交流道']]};
+function explore(){
+  var m=S.mode,i=S.sub,h='<div class="modes">'+MODES.map(function(x){return '<button data-m="'+x[0]+'" aria-pressed="'+(S.mode===x[0])+'"><span>'+x[1]+'</span>'+t(x[2])+'</button>'}).join('')+'</div>';
+  h+='<div class="tabs" role="tablist">'+SUB[m].map(function(s,j){return '<button role="tab" data-s="'+j+'" aria-selected="'+(i===j)+'">'+t(s)+'</button>'}).join('')+'</div>';
+  if(S.abn&&m==='hsr')h+='<div class="banner">高鐵台中站營運異常，請參考即時班表與替代方案。</div>';
+  var st=S.abn?['營運異常','bad']:['正常','ok'];
+  if(m==='hsr'){
+    if(i===0)h+=card('高鐵台中站','0.4 公里・目前位置',st[0],st[1])+card('高鐵彰化站','約 19 公里・南下方向','正常','ok')+card('高鐵苗栗站','約 32 公里・北上方向','正常','ok')+demo();
+    if(i===1){h+='<div class="seg"><button data-d="S" aria-pressed="'+(S.dir==='S')+'">'+t('南下')+'</button><button data-d="N" aria-pressed="'+(S.dir==='N')+'">'+t('北上')+'</button></div><div class="sub" style="margin-bottom:8px">起站 台中 → 訖站 '+(S.dir==='S'?'左營／台南／嘉義':'南港／台北／桃園')+'</div>';
+      hsr(S.dir).forEach(function(x,j){var s=status(x);h+='<div class="card train'+(j?'':' next')+'"><div class="no">'+x.no+'<small>'+x.to+'</small></div><div><span class="tm">'+fmt(x.dep)+'<i>→</i>'+fmt(x.dep+x.dur)+'</span><div class="sub">台中 → '+x.to+'・約 '+x.dur+' 分</div></div>'+pill(s[0],s[1])+'</div>'})}
+    if(i===2)h+=alts(ALT_HSR());
+  }
+  if(m==='tra'){
+    if(i===0)h+=card('台鐵新烏日站','0.6 公里・與高鐵台中站轉乘','正常','ok')+card('台鐵台中站','約 11 公里','正常','ok')+card('台鐵彰化站','約 20 公里','準點','ok');
+    if(i===1){h+='<div class="seg"><button data-d="S" aria-pressed="'+(S.dir==='S')+'">'+t('南下')+'</button><button data-d="N" aria-pressed="'+(S.dir==='N')+'">'+t('北上')+'</button></div>';var n=nowMin()+4;
+      [['自強',171,'樹林','潮州',0,1],['區間',2237,'新烏日','彰化',3,2],['區間快',3129,'新烏日','員林',0,1],['自強',123,'汐止','屏東',9,2]].forEach(function(r,j){var late=r[4],e=S.dir==='S'?r[3]:r[2];
+        h+='<div class="card train"><div class="no">'+r[1]+'<small>'+r[0]+'</small></div><div><span class="tm">'+fmt(n+j*13)+'</span><div class="sub">新烏日 → '+e+'・'+(S.dir==='S'?'南下':'北上')+' '+r[5]+' 號月台</div></div>'+pill(late?'誤點 '+late+' 分':'準點',late?'warn':'ok')+'</div>'})}
+    if(i===2)h+=alts([['高鐵','高鐵台中站','由新烏日站步行轉乘，約 10 分鐘','高鐵台中站'],['客運','國道客運','新烏日周邊客運站，約每 30 分一班','新烏日站 客運'],['公路','國道一號自駕','經台中系統交流道','台中系統交流道']]);
+  }
+  if(m==='bus'){
+    if(i===0)h+=card('烏日高鐵站客運站','0.5 公里・營運中','正常','ok')+card('台中火車站轉運站','約 11 公里・營運中','正常','ok');
+    if(i===1)h+=[['1820','台中—台北','業者 A',nowMin()+8,'正常','ok'],['1833','台中—台北（高鐵站）','業者 B',nowMin()+21,'正常','ok'],['6899','台中—高雄','業者 A',nowMin()+34,'延誤 10 分','warn']].map(function(r){return '<div class="card train"><div class="no">'+r[0]+'<small>'+r[2]+'</small></div><div><span class="tm">'+fmt(r[3])+'</span><div class="sub">'+r[1]+'</div></div>'+pill(r[4],r[5])+'</div>'}).join('');
+    if(i===2)h+=card('1833 路線異動','國道施工，停靠站暫時調整','異動','warn')+card('6899 末班車','21:30 已駛離高鐵站','末班','vio')+card('1820 班次','今日 17:40 班次取消','異常','bad');
+    if(i===3)h+=alts([['高鐵','高鐵台中站','南下／北上班次依即時班表','高鐵台中站'],['台鐵','台鐵新烏日站','區間車約 15 分一班','新烏日站'],['公路','國道一號自駕','注意即時路況','台中系統交流道']]);
+  }
+  if(m==='road'){
+    if(i===0)h+=card('國道1號 台中系統段','0.9 公里・北上','車多','warn')+card('國道3號 霧峰系統段','約 12 公里・南下','暢通','ok')+card('台74線 快速道路','約 3 公里・東向','暢通','ok')+card('台1線 中彰快速道路','約 7 公里','壅塞','bad');
+    if(i===1)h+='<svg class="map" viewBox="0 0 360 190" role="img" aria-label="路況地圖"><path d="M10 150 L120 120 L220 80 L350 40" stroke="#f5a524" stroke-width="6" fill="none"/><path d="M10 40 L130 70 L230 130 L350 160" stroke="#22b07d" stroke-width="6" fill="none"/><path d="M180 5 L190 60 L200 100 L215 185" stroke="#e5484d" stroke-width="6" fill="none"/><circle cx="200" cy="100" r="9" fill="#7a4de8"/><text x="212" y="96" fill="#fff" font-size="11">台中系統</text></svg><div class="legend"><span><i style="background:#22b07d"></i>暢通</span><span><i style="background:#f5a524"></i>車多</span><span><i style="background:#e5484d"></i>壅塞</span><span><i style="background:#7a4de8"></i>過載</span></div>'+card('國道1號 北上','台中系統 → 豐原','車多','warn')+card('國道1號 南下','台中系統 → 彰化','暢通','ok');
+    if(i===2)h+=card('事故｜國道1號 北上 K168','右側車道，現場處理中','事故','bad')+card('施工｜台74線 東向','外側車道封閉至 22:00','施工','warn')+card('管制｜台1線 高架段','匝道臨時管制','管制','vio');
+    if(i===3)h+='<div class="card"><div class="nm">方案 1</div><div class="sub">國道1號 → 台74線 → 台1線 → 市區</div></div><div class="card"><div class="nm">方案 2</div><div class="sub">國道1號 → 台1線 → 中彰快速道路 → 目的地</div></div><a class="go" style="display:block;text-align:center" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=台中系統交流道&travelmode=driving">'+t('導航')+'</a>';
+  }
+  if(m==='sea'){
+    if(i===0)h+=card('台中港—澎湖航線','今日 2 班','停航','bad')+card('台中港—平潭航線','今日 1 班','正常','ok');
+    if(i===1)h+=card('台中港營運狀態','港區作業中','正常','ok')+card('氣象資訊','海面風浪偏大，浪高 2.5 公尺','注意','warn')+card('船班異動','14:30 班次延後 40 分','異動','warn');
+    if(i===2)h+=alts([['空運','台中國際機場','改搭澎湖航班，約 35 分鐘','台中國際機場'],['高鐵','高鐵台中站','改搭高鐵至其他港口城市','高鐵台中站']]);
+  }
+  if(m==='air'){
+    if(i===0)h+=card('台中—澎湖 航班','今日 2 班','停航','bad')+card('台中—金門 航班','今日 4 班','正常','ok');
+    if(i===1)h+=card('台中國際機場','跑道作業正常','正常','ok')+card('航班延誤','1 班延誤 25 分','延誤','warn')+card('重要航空資訊','天氣良好，無飛航限制','正常','ok');
+    if(i===2)h+=alts([['空運','桃園國際機場','替代機場，高鐵約 45 分到桃園站','桃園國際機場'],['高鐵','高鐵台中站','改搭高鐵往台北／高雄','高鐵台中站']]);
+  }
+  return h}
 function home(){
- const al=['hsr','tra','bus','road'].filter(m=>mi(m).c!=='ok').map(m=>{const x=mi(m),M=MODES.find(a=>a[0]===m);return`<div class="card"><div class="row"><b>${M[1]} ${M[2]}</b>${pill(x.c)}</div><div class="sub">${x.txt}</div></div>`}).join('')||'<div class="card sub">目前沒有影響您常用行程（台中 → 台北）的異常。</div>';
- const nr=[['高鐵台中站','0.4 公里','hsr'],['台鐵新烏日站','0.6 公里','tra'],['台中系統交流道','0.9 公里','road']].map(r=>`<div class="row"><div><b>${r[0]}</b><div class="sub">${r[1]}</div></div>${pill(mi(r[2]).c)}</div>`).join('');
- return banner()+`<div class="h">我要去哪</div><div class="chips"><button data-dest="台北">📍 台中 → 台北</button><button data-dest="高雄">📍 台中 → 高雄</button></div><div class="h">與我有關的警示</div>${al}<div class="h">鄰近場站</div><div class="near">${nr}</div><div class="h">運具</div><div class="grid">${MODES.map(m=>`<button data-go="${m[0]}"><span class="deco">${m[1]}</span>${m[2]}</button>`).join('')}</div>`}
-function trip(){const B=best(),L=opts(),sel=L.find(o=>o.k===S.opt&&o.min!=null)||B||L[0];
- return banner()+`<div class="seg">${['台北','高雄'].map(d=>`<button data-dest="${d}" aria-pressed="${S.dest===d}" data-stay="1">台中 → ${d}</button>`).join('')}</div><div class="card"><b>出發時機建議</b><div class="sub">${TM[S.scn]}</div></div>`+L.map(o=>`<button class="card opt ${o.k===sel.k?'sel':''}" data-o="${o.k}"><div class="row"><div><b>${o.ico} ${o.lb}</b>${B&&o.k===B.k?'<span class="tag">推薦</span>':''}<div class="sub">${o.txt}</div></div><div><div class="big">${o.min==null?'—':'約 '+o.min+' 分'}</div>${pill(o.st)}</div></div><div class="sub">換乘 ${o.tr} 次・約 NT$${o.fee}（示意）</div></button>`).join('')+chain(sel)+`<p class="note">${S.less?'已啟用「少轉乘優先」。':''}全程時間含前往場站與候車。</p>`}
-function modes(){const m=S.mode,x=mi(m);let h=`<div class="chips">${MODES.map(a=>`<button data-m="${a[0]}" aria-pressed="${m===a[0]}">${a[1]} ${a[2]}</button>`).join('')}</div>`;
- h+=`<div class="card"><div class="row"><b>現況</b>${pill(x.c)}</div><p>${x.txt}</p><div class="kv"><b>原因與預估恢復時間</b>${x.why}${x.eta!=='—'?'；'+x.eta:''}</div><div class="kv"><b>替代方案與換乘成本</b>${x.alt}</div>${x.c!=='ok'?'<button class="chips" style="background:none;border:0;padding:0" data-gotrip="1"><span class="tag" style="margin:8px 0 0">查看替代行程 ›</span></button>':''}<div class="src">${upd(m)}</div></div>`;
- if(m==='hsr'){h+=`<div class="seg"><button data-d="S" aria-pressed="${S.dir==='S'}">南下</button><button data-d="N" aria-pressed="${S.dir==='N'}">北上</button></div><div class="sub" style="margin-bottom:6px">起站 台中</div>`+hsrList().map(t=>{const s=tst(t);return`<div class="card train"><div class="no">${t.no}</div><div><b>${fmt(t.dep)} → ${fmt(t.dep+t.dur)}</b><div class="sub">台中 → ${t.to}・約 ${t.dur} 分</div></div>${pill(s[0],s[1]||undefined)}</div>`}).join('')}
- else h+=ITEMS[m].map((it,i)=>`<div class="card row"><div><b>${it[0]}</b><div class="sub">${it[1]}${m==='tra'||m==='bus'?'・'+fmt(nowMin()+8+i*13):''}</div></div>${pill(x.c)}</div>`).join('');
- return h}
-function best2(){const B=best();return B?`建議${B.lb}，全程約 ${B.min} 分（台中 → ${S.dest}）。${TM[S.scn]}`:'目前各運具都無法確認，請以官方公告為準。'}
-function reply(q){const M=/高鐵|為什麼|異常|停/.test(q)?'hsr':/國道|路況|塞/.test(q)?'road':null;
- if(M){const x=mi(M);return`${M==='hsr'?'高鐵':'公路'}目前：${x.txt}。原因：${x.why}。替代：${x.alt}。<div class="src">${upd(M)}</div>`}
- if(/怎麼|去|台北|高雄|最快|行程|推薦/.test(q)){if(/高雄/.test(q))S.dest='高雄';else if(/台北/.test(q))S.dest='台北';return best2()+`<div class="src">${upd('road')}</div>`}
- return'我可以回答行程比較、營運異常原因與路況。目前無法確認的內容，請以官方公告為準。'}
-function ai(){if(!S.msgs.length)S.msgs.push(['bot','您好，我是旅運小幫手。回答只根據目前資料，並附更新時間。']);return`<div class="chat">${S.msgs.map(m=>`<div class="${m[0]}">${m[1]}</div>`).join('')}</div><div class="chips" style="margin-top:10px">${['台中到台北怎麼去？','高鐵為什麼異常？','國道一號塞車嗎？'].map(c=>`<button data-q="${c}">${c}</button>`).join('')}</div>`}
-const tg=k=>`<button class="tg" role="switch" data-tg="${k}" aria-checked="${!!S[k]}"></button>`;
-function me(){const r=(l,s,c)=>`<div class="card row"><div><b>${l}</b><div class="sub">${s}</div></div>${c}</div>`;
- return`<div class="h">偏好與無障礙</div>`+r('少轉乘優先','路線排序時降低換乘次數多的選項',tg('less'))+r('簡版模式','文字為主、隱藏裝飾，停電時自動啟用',tg('lite'))+r('高對比模式','加強文字與背景對比',tg('hc'))+r('語音朗讀','AI 小幫手回覆時朗讀',tg('tts'))+`<div class="card"><b>字體大小</b><div class="seg" style="margin:8px 0 0">${[[1,'標準'],[1.15,'大'],[1.3,'特大']].map(a=>`<button data-fs="${a[0]}" aria-pressed="${S.fs===a[0]}">${a[1]}</button>`).join('')}</div></div><div class="card"><b>聯絡我們</b><div class="sub">客服與意見回饋（模擬）</div></div>`}
-function render(){const d=tp(),lite=S.lite||S.scn==='outage';
- document.documentElement.dataset.hc=S.hc?1:0;document.documentElement.classList.toggle('lite',!!lite);document.documentElement.style.setProperty('--fs',S.fs);
- $('clk').textContent='現在 '+pad(d.getHours())+':'+pad(d.getMinutes())+(lite?'・簡版':'');
- $('scn').innerHTML=Object.keys(SCN).map(k=>`<button data-s="${k}" aria-pressed="${S.scn===k}">${SCN[k]}</button>`).join('');
- $('main').innerHTML={home,trip,modes,ai,me}[S.pg]();$('ask').hidden=S.pg!=='ai';
- $('foot').innerHTML=[['home','🏠','首頁'],['trip','🧭','行程'],['ai','✦','AI小幫手'],['modes','🚦','運具'],['me','⚙️','我的']].map(x=>`<button data-p="${x[0]}" ${x[0]==='ai'?'class="c"':''} ${S.pg===x[0]?'aria-current="page"':''}><span>${x[1]}</span>${x[2]}</button>`).join('')}
-function say(q){S.msgs.push(['me',esc(q)],['bot',reply(q)]);render();const m=$('main');m.scrollTop=m.scrollHeight;if(S.tts){try{const u=new SpeechSynthesisUtterance(m.querySelector('.chat').lastChild.textContent);u.lang='zh-TW';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}}
-document.addEventListener('click',e=>{const g=a=>{const n=e.target.closest('['+a+']');return n&&n.getAttribute(a)};let v;
- if(v=g('data-p'))S.pg=v;else if(v=g('data-s')){S.scn=v;S.opt=null}else if(v=g('data-dest')){S.dest=v;S.opt=null;S.pg='trip'}
- else if(v=g('data-go')){S.mode=v;S.pg='modes'}else if(v=g('data-m'))S.mode=v;else if(v=g('data-d'))S.dir=v;
- else if(v=g('data-o'))S.opt=v;else if(g('data-gotrip'))S.pg='trip';else if(v=g('data-fs'))S.fs=+v;
- else if(v=g('data-tg'))S[v]=S[v]?0:1;else if(v=g('data-q'))return say(v);
- else if(e.target.closest('#send')){const i=$('q'),q=i.value.trim();if(q){i.value='';return say(q)}return}else return;render()});
+  var near=[['高鐵台中站','🚄','0.4 公里',S.abn?'營運異常':'正常',S.abn?'bad':'ok'],['台鐵新烏日站','🚆','0.6 公里','正常','ok'],['台中系統交流道','🛣️','0.9 公里','車多','warn'],['台中國際機場','✈️','約 14 公里','正常','ok']];
+  var h='<div class="near"><div class="row nh"><b>'+t('鄰近場站')+'</b><button class="all" data-go="hsr">'+t('查看全部')+' ›</button></div>'+near.map(function(r){return '<div class="row nr"><div><div class="nm">'+t(r[0])+'</div><div class="sub">'+r[2]+'</div></div>'+pill(r[3],r[4])+'</div>'}).join('')+demo()+'</div><div class="grid">'+MODES.map(function(x){return '<button data-go="'+x[0]+'"><span>'+x[1]+'</span>'+t(x[2])+'</button>'}).join('')+'</div>';
+  return h}
+function route(){
+  var r=[['高鐵',S.abn?'暫停':'約 58 分',S.abn?'bad':'ok'],['台鐵','約 110 分','ok'],['客運','約 150 分','warn'],['自駕','約 120 分（國道1號車多）','warn']];
+  var best=S.abn?'台鐵':'高鐵';
+  return '<b>台中 → 台北</b>，依目前路況與營運狀態比較：<table class="cmp">'+r.map(function(x){return '<tr><td>'+t(x[0])+(x[0]===best?'<span class="tag">'+t('最快')+'</span>':'')+'</td><td>'+x[1]+'</td></tr>'}).join('')+'</table>'}
+function reply(q){
+  if(/高鐵|異常|替代/.test(q))return S.abn?'高鐵台中站目前營運異常，建議改搭台鐵新烏日站區間車，步行約 3 分鐘即可到站。':'高鐵台中站目前正常營運。如遇異常，可改搭台鐵新烏日站、國道客運或自駕。';
+  if(/國道|塞|路況|事故/.test(q))return '國道1號北上 K168 發生事故，目前車多。替代路線：國道1號 → 台74線 → 台1線。';
+  if(/台北|去|怎麼|路線|規劃/.test(q))return route();
+  return '我可以協助查詢路況、比較運具與規劃路線，也可以試著問「台中到台北怎麼去？」'}
+function ai(){
+  if(!S.msgs.length)S.msgs.push(['bot','您好，我是旅運小幫手。可詢問路線、路況或替代運具。']);
+  return '<div class="chat" aria-live="polite">'+S.msgs.map(function(m){return '<div class="'+(m[0]==='me'?'me':'bot')+'">'+m[1]+'</div>'}).join('')+'</div><div class="chips">'+['台中到台北怎麼去？','國道一號塞車嗎？','高鐵異常有哪些替代？'].map(function(c){return '<button data-q="'+c+'">'+c+'</button>'}).join('')+'</div>'}
+function contact(){return '<div class="h3">'+t('聯絡我們')+'</div><div class="card"><div class="nm">客服專線</div><div class="sub">週一至週五 08:30–17:30（模擬）</div></div><div class="card"><div class="nm">意見回饋</div><div class="sub">提供使用問題或功能建議（模擬）</div></div>'}
+function seg(k,opts){return '<div class="seg">'+opts.map(function(o){return '<button data-k="'+k+'" data-v="'+o[0]+'" aria-pressed="'+(String(S[k])===String(o[0]))+'">'+o[1]+'</button>'}).join('')+'</div>'}
+function tg(k){return '<button class="tg" role="switch" data-tg="'+k+'" aria-checked="'+S[k]+'"></button>'}
+function settings(){
+  return '<div class="h3">'+t('一般設定')+'</div><div class="card"><div class="set"><span class="nm">'+t('語言選擇')+'</span>'+seg('lang',[['zh','繁體中文'],['en','English']])+'</div></div><div class="h3">'+t('無障礙設定')+'</div><div class="card"><div class="set"><span class="nm">'+t('字體大小')+'</span>'+seg('fs',[[1,t('標準')],[1.15,t('大')],[1.3,t('特大')]])+'</div><div class="set"><span class="nm">'+t('顯示模式')+'</span>'+seg('hc',[[false,t('標準模式')],[true,t('高對比模式')]])+'</div><div class="set"><span class="nm">'+t('語音朗讀')+'</span>'+tg('tts')+'</div><div class="set" style="margin:0"><span class="nm">'+t('語音提示')+'</span>'+tg('tip')+'</div></div>'}
+function render(){
+  var d=tp(),w='日一二三四五六'[d.getDay()];
+  document.documentElement.lang=S.lang==='en'?'en':'zh-Hant';
+  document.documentElement.dataset.hc=S.hc?'1':'0';document.documentElement.style.setProperty('--fs',S.fs);
+  document.getElementById('slogan').textContent=t('多運具旅運服務');
+  document.getElementById('upd').textContent=t('更新時間')+' '+d.getFullYear()+'/'+pad(d.getMonth()+1)+'/'+pad(d.getDate())+'（'+w+'）'+pad(d.getHours())+':'+pad(d.getMinutes())+'・GPS：臺中市烏日區（模擬）';
+  document.getElementById('mq').innerHTML='<b>📣</b><div class="mw"><span>'+(S.abn?'【異常】高鐵台中站營運異常，請參考替代方案。':'【快訊】國道1號北上 K168 事故，車多；高鐵台中站正常營運。')+'</span></div>';
+  var m=document.getElementById('main');m.innerHTML=S.pg==='home'?home():S.pg==='explore'?explore():S.pg==='ai'?ai():S.pg==='contact'?contact():settings();
+  document.getElementById('ask').hidden=S.pg!=='ai';
+  var N=[['home','🏠','首頁'],['explore','🧭','探索'],['ai','✦','AI助理'],['set','⚙️','設定'],['contact','☺','聯絡我們']];
+  document.getElementById('foot').innerHTML=N.map(function(x){return '<button data-p="'+x[0]+'"'+(x[0]==='ai'?' class="c"':'')+(S.pg===x[0]?' aria-current="page"':'')+'><span>'+x[1]+'</span>'+t(x[2])+'</button>'}).join('');
+}
+function say(q){S.msgs.push(['me',q]);S.msgs.push(['bot',reply(q)]);render();var c=document.getElementById('main');c.scrollTop=c.scrollHeight;
+  if(S.tts){try{var u=new SpeechSynthesisUtterance(c.querySelector('.chat').lastChild.textContent);u.lang=S.lang==='en'?'en-US':'zh-TW';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}}
+document.addEventListener('click',function(e){
+  var g=function(a){var n=e.target.closest('['+a+']');return n&&n.getAttribute(a)};var v;
+  if(v=g('data-p')){S.pg=v}
+  else if(v=g('data-go')){S.pg='explore';S.mode=v;S.sub=0}
+  else if(v=g('data-m')){S.mode=v;S.sub=0}
+  else if(v=g('data-s')){S.sub=+v}
+  else if(v=g('data-d')){S.dir=v}
+  else if(g('data-a')==='abn'){S.abn=!S.abn}
+  else if(v=g('data-q')){return say(v)}
+  else if(g('data-k')){var b=e.target.closest('[data-k]'),k=b.dataset.k,x=b.dataset.v;S[k]=(k==='fs')?+x:(k==='hc')?x==='true':x}
+  else if(v=g('data-tg')){S[v]=!S[v]}
+  else if(e.target.closest('#send')){var i=document.getElementById('q');if(i.value.trim()){var q=i.value.trim();i.value='';return say(q)}return}
+  else return;
+  render()});
+document.getElementById('ask').addEventListener('submit',function(){document.getElementById('send').click()});
 setInterval(render,60000);render();
 </script>
 </body>
